@@ -1,3 +1,5 @@
+package servlet;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +16,6 @@ public class ByebyeServlet extends HttpServlet {
         String name = req.getParameter("name"); //TODO: не путать с методом req.getAttribute()
 
         resp.setContentType("text/html");
-        resp.getWriter().println("<h1>Byebye " + name + " from ByebyeServlet. Your age " + age + " </h1>");
+        resp.getWriter().println("<h1>Byebye " + name + " from servlet.ByebyeServlet. Your age " + age + " </h1>");
     }
 }

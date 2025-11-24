@@ -1,19 +1,18 @@
+package scope;
+
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.Writer;
-
-public class HelloServlet extends HttpServlet {
+@WebServlet("/app-scope")
+public class ScopeApp extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-
-        Writer writer = resp.getWriter();
-        writer.write("Hello World \n");
-        writer.write("This is from HelloServlet");
-        writer.close();
+        ServletContext context = getServletContext();
+        context.setAttribute("name", "fromAppContext");
     }
 }
