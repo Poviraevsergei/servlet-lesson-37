@@ -1,0 +1,81 @@
+/* Общие стили для страницы */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Контейнер страницы логина */
+#login-page {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+/* Заголовок */
+#login-page h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Форма */
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Метки и поля ввода */
+#login-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+    padding: 12px;
+    border: 2px solid #e1e1e1;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+#login-form input[type="text"]:focus,
+#login-form input[type="password"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Кнопка */
+#login-form button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+#login-form button:hover {
+    background-color: #0056b3;
+}
