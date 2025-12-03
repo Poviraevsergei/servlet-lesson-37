@@ -8,20 +8,30 @@ import jakarta.servlet.http.HttpServletResponse;
 import repository.TaskRepository;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
-@WebServlet("/todo")
-public class TodoServlet extends HttpServlet {
+@WebServlet("/tasks")
+public class TaskServlet extends HttpServlet {
     private final TaskRepository taskRepository;
 
-    public TodoServlet() {
+    public TaskServlet() {
         this.taskRepository = new TaskRepository();
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = String.valueOf(req.getSession().getAttribute("username"));
         Set<String> tasks = taskRepository.getTaskListByUsername(username);
+        if (tasks == null) {
+            tasks = new HashSet<>();
+        }
+        tasks.add(req.getParameter("task"));
+        boolean isUpdated = taskRepository.updateTaskListByUsername(username, tasks);
+        if (!isUpdated) {
+            req.setAttribute("warnMessage", "Task not updated!");
+            getServletContext().getRequestDispatcher("/WEB-INF/pages/todo.jsp").forward(req, resp);
+        }
         req.setAttribute("tasks", tasks);
         getServletContext().getRequestDispatcher("/WEB-INF/pages/todo.jsp").forward(req, resp);
     }
