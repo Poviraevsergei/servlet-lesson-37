@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @WebFilter(urlPatterns = {
         "/todo",
-        "/about-me", //TODO: WHY FILTER IS NOT WORKING !?
+        "/about-me",
         "/tasks"
 })
 public class AuthFilter implements Filter {
@@ -29,11 +29,13 @@ public class AuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        System.out.println("Filter working:" + ((HttpServletRequest) request).getRequestURI());
         HttpSession session = ((HttpServletRequest) request).getSession();
         String username = (String) session.getAttribute("username");
         if (username != null && userRepository.isUsernameContains(username)) {
             chain.doFilter(request, response);
+            return;
         }
-            request.getRequestDispatcher("/login.html").forward(request, response);
+        request.getRequestDispatcher("/login.html").forward(request, response);
     }
 }

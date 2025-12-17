@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import repository.TaskRepository;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @WebServlet("/tasks")
@@ -24,9 +24,14 @@ public class TaskServlet extends HttpServlet {
         String username = String.valueOf(req.getSession().getAttribute("username"));
         Set<String> tasks = taskRepository.getTaskListByUsername(username);
         if (tasks == null) {
-            tasks = new HashSet<>();
+            tasks = new LinkedHashSet<>();
         }
-        tasks.add(req.getParameter("task"));
+        if (req.getParameter("task") != null) {
+            tasks.add(req.getParameter("task"));
+        }
+        if (req.getParameter("removeTask") != null) {
+            tasks.remove(req.getParameter("removeTask"));
+        }
         boolean isUpdated = taskRepository.updateTaskListByUsername(username, tasks);
         if (!isUpdated) {
             req.setAttribute("warnMessage", "Task not updated!");
