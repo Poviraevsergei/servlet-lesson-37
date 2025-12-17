@@ -5,10 +5,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class TaskRepository {
+    private static TaskRepository instance;
     private final Map<String, Set<String>> taskList;
 
-    public TaskRepository() {
+    private TaskRepository() {
         this.taskList = new HashMap<>();
+    }
+
+    public static TaskRepository getInstance() {
+        if (instance == null) {
+            instance = new TaskRepository();
+        }
+        return instance;
     }
 
     public Set<String> getTaskListByUsername(String username) {

@@ -15,7 +15,7 @@ public class TodoServlet extends HttpServlet {
     private final TaskRepository taskRepository;
 
     public TodoServlet() {
-        this.taskRepository = new TaskRepository();
+        this.taskRepository = TaskRepository.getInstance();
     }
 
     @Override

@@ -16,7 +16,7 @@ public class TaskServlet extends HttpServlet {
     private final TaskRepository taskRepository;
 
     public TaskServlet() {
-        this.taskRepository = new TaskRepository();
+        this.taskRepository = TaskRepository.getInstance();
     }
 
     @Override

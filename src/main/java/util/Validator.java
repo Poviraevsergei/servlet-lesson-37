@@ -6,7 +6,7 @@ public class Validator {
     private final UserRepository userRepository ;
 
     public Validator() {
-        this.userRepository = new UserRepository();
+        this.userRepository = UserRepository.getInstance();
     }
 
     public boolean validateLoginPassword(String username, String password) {
