@@ -30,6 +30,13 @@
       <artifactId>apache-jstl</artifactId>
       <version>11.0.0</version>
     </dependency>
+
+    <!-- JDBC Postgres Driver -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.5.1</version>
+    </dependency>
   </dependencies>
 
   <build>

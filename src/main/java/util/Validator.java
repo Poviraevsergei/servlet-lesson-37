@@ -17,7 +17,7 @@ public class Validator {
                 && userRepository.isPasswordContains(password);
 
         if (isValid) {
-            return username.equals(userRepository.getUsernameByPassword(password));
+            return username.equals(userRepository.getUserByPassword(password).getUsername());
         }
         return false;
     }
