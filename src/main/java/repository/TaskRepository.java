@@ -1,15 +1,22 @@
 package repository;
 
-import java.util.HashMap;
-import java.util.Map;
+import util.DatabaseConfig;
+import util.SQLCommands;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TaskRepository {
     private static TaskRepository instance;
-    private final Map<String, Set<String>> taskList;
+    private final Connection connection;
 
     private TaskRepository() {
-        this.taskList = new HashMap<>();
+        connection = DatabaseConfig.getConnection();
     }
 
     public static TaskRepository getInstance() {
@@ -20,16 +27,37 @@ public class TaskRepository {
     }
 
     public Set<String> getTaskListByUsername(String username) {
-        return taskList.get(username);
+        Set<String> taskList = new LinkedHashSet<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SQLCommands.GET_TASKS_BY_USERNAME);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                taskList.add(resultSet.getString(1));
+            }
+            return taskList;
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e);
+            throw new RuntimeException(e);
+        }
     }
 
-    public boolean updateTaskListByUsername(String username, Set<String> taskList) {
+    public boolean addTaskByUsername(String username, String task) {
         try {
-            this.taskList.put(username, taskList);
-            return true;
+            PreparedStatement statement = connection.prepareStatement(SQLCommands.ADD_TASK_BY_USERNAME);
+            statement.setString(1, task);
+            statement.setString(2, username);
+            return statement.executeUpdate() == 1;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    public void removeTasksByUserId(long userId) throws SQLException {
+        CallableStatement statement = connection.prepareCall("CALL removeTasksByUserId(?)");
+        statement.setLong(1, userId);
+
+        statement.execute();
     }
 }

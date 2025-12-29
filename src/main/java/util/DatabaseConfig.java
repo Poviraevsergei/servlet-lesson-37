@@ -9,6 +9,14 @@ public class DatabaseConfig {
     private static final String LOGIN = "user37";
     private static final String PASSWORD = "root";
 
+    static {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, LOGIN, PASSWORD);

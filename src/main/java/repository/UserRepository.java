@@ -27,11 +27,6 @@ public class UserRepository {
         return instance;
     }
 
-    public boolean isUsernameContains(String username) {
-        //return userList.containsKey(username);
-        return false;
-    }
-
     public List<User> getAllUsers() {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SQLCommands.GET_ALL_USERS);
@@ -52,7 +47,6 @@ public class UserRepository {
 
             int result = preparedStatementUser1.executeUpdate();
 
-            //добавляем 2 юзера
             PreparedStatement preparedStatementUser2 = connection.prepareStatement(SQLCommands.CREATE_USER);
             preparedStatementUser2.setString(1, username);
             preparedStatementUser2.setString(2, password);
@@ -96,8 +90,27 @@ public class UserRepository {
     }
 
     public boolean isPasswordContains(String password) {
-        //return userList.containsValue(password);
-        return false;
+        try {
+            PreparedStatement statement = connection.prepareStatement(SQLCommands.GET_USER_BY_PASSWORD);
+            statement.setString(1, password);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isUsernameContains(String username) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(SQLCommands.GET_USER_BY_USERNAME);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e);
+            throw new RuntimeException(e);
+        }
     }
 
     public User getUserByPassword(String password) {
@@ -108,6 +121,7 @@ public class UserRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
             return getUserFromResultSet(resultSet);
         } catch (SQLException e) {
+            System.out.println("SQLException: " + e);
             throw new RuntimeException(e);
         } catch (UserNotFound e) {
             System.out.println("Username with password " + password + " not found");

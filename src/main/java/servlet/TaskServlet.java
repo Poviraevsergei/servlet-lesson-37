@@ -14,6 +14,7 @@ import java.util.Set;
 @WebServlet("/tasks")
 public class TaskServlet extends HttpServlet {
     private final TaskRepository taskRepository;
+    private Boolean isUpdated;
 
     public TaskServlet() {
         this.taskRepository = TaskRepository.getInstance();
@@ -22,22 +23,17 @@ public class TaskServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = String.valueOf(req.getSession().getAttribute("username"));
-        Set<String> tasks = taskRepository.getTaskListByUsername(username);
-        if (tasks == null) {
-            tasks = new LinkedHashSet<>();
-        }
         if (req.getParameter("task") != null) {
-            tasks.add(req.getParameter("task"));
+            isUpdated = taskRepository.addTaskByUsername(username, req.getParameter("task"));
         }
-        if (req.getParameter("removeTask") != null) {
-            tasks.remove(req.getParameter("removeTask"));
-        }
-        boolean isUpdated = taskRepository.updateTaskListByUsername(username, tasks);
+        //if (req.getParameter("removeTask") != null) { TODO: remove
+        //    tasks.remove(req.getParameter("removeTask"));
+        //}
         if (!isUpdated) {
             req.setAttribute("warnMessage", "Task not updated!");
             getServletContext().getRequestDispatcher("/WEB-INF/pages/todo.jsp").forward(req, resp);
         }
-        req.setAttribute("tasks", tasks);
+        req.setAttribute("tasks", taskRepository.getTaskListByUsername(username));
         getServletContext().getRequestDispatcher("/WEB-INF/pages/todo.jsp").forward(req, resp);
     }
 }
