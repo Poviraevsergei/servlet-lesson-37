@@ -3,7 +3,6 @@ package repository;
 import util.DatabaseConfig;
 import util.SQLCommands;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,10 +53,15 @@ public class TaskRepository {
         }
     }
 
-    public void removeTasksByUserId(long userId) throws SQLException {
-        CallableStatement statement = connection.prepareCall("CALL removeTasksByUserId(?)");
-        statement.setLong(1, userId);
-
-        statement.execute();
+    public boolean removeTaskByUsername(String username, String task) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(SQLCommands.REMOVE_TASK_BY_USERNAME_AND_VALUE);
+            statement.setString(1, username);
+            statement.setString(2, task);
+            return statement.executeUpdate() == 1;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

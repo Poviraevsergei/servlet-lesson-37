@@ -7,4 +7,5 @@ public interface SQLCommands {
     String GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username=?";
     String GET_TASKS_BY_USERNAME = "SELECT value FROM tasks WHERE user_id=(SELECT id FROM users WHERE username=?);";
     String ADD_TASK_BY_USERNAME = "INSERT INTO tasks (value, user_id) VALUES (?, (SELECT id FROM users WHERE username=?))";
+    String REMOVE_TASK_BY_USERNAME_AND_VALUE = "DELETE FROM tasks WHERE user_id = (SELECT id FROM users WHERE username=?) AND value=?";
 }

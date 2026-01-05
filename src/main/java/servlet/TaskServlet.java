@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import repository.TaskRepository;
 
 import java.io.IOException;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @WebServlet("/tasks")
 public class TaskServlet extends HttpServlet {
@@ -26,11 +24,12 @@ public class TaskServlet extends HttpServlet {
         if (req.getParameter("task") != null) {
             isUpdated = taskRepository.addTaskByUsername(username, req.getParameter("task"));
         }
-        //if (req.getParameter("removeTask") != null) { TODO: remove
-        //    tasks.remove(req.getParameter("removeTask"));
-        //}
+        if (req.getParameter("removeTask") != null) {
+            isUpdated = taskRepository.removeTaskByUsername(username, req.getParameter("removeTask"));
+        }
         if (!isUpdated) {
             req.setAttribute("warnMessage", "Task not updated!");
+            req.setAttribute("tasks", taskRepository.getTaskListByUsername(username));
             getServletContext().getRequestDispatcher("/WEB-INF/pages/todo.jsp").forward(req, resp);
         }
         req.setAttribute("tasks", taskRepository.getTaskListByUsername(username));
